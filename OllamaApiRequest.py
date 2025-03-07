@@ -1,5 +1,6 @@
 import os
 
+import certifi
 import requests
 
 
@@ -20,7 +21,7 @@ def ollama_api_request(prompt):
             "stream": False
         }
 
-        response = requests.post(url, json=payload, timeout=(5, 300))
+        response = requests.post(url, json=payload, timeout=(5, 300),verify=certifi.where())
         print(response)
         response.raise_for_status()
 

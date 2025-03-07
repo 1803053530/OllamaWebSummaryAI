@@ -1,5 +1,8 @@
 import os
 import threading
+
+import certifi
+
 from OllamaApiRequest import ollama_api_request
 
 import requests
@@ -18,7 +21,11 @@ def fetch_webpage_content(url):
         }
 
         # 获取二进制响应内容
-        response = requests.get(url, headers=headers, timeout=10)
+        try:
+            response = requests.get(url, headers=headers, timeout=30, verify=certifi.where())
+        except:
+            print("方案一失败，正在尝试方案二进行网页爬取......")
+            response = requests.get(url, headers=headers, timeout=30, verify=False)
         response.raise_for_status()
         raw_content = response.content
 
@@ -117,7 +124,7 @@ def process_webpages(urls):
 if __name__ == "__main__":
     # 在此处添加需要爬取的URL列表
     urls_to_process = [
-        # "https://www.example.com/",
+        # "https://www.baidu.com"
     ]
     if not urls_to_process:
         print("请添加需要处理的网页URL!")
